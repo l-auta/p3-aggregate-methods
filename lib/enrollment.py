@@ -14,6 +14,9 @@ class Student:
 
     def get_enrollments(self):
         return self._enrollments.copy()
+    
+    def course_count(self):
+        return len(self._enrollments)
 
 class Course:
     def __init__(self, title):
@@ -29,6 +32,12 @@ class Course:
 
     def get_enrollments(self):
         return self._enrollments.copy()
+    
+    def aggregate_average_grade(self):
+        total_grades = sum(self._grades.values())
+        num_courses = len(self._grades)
+        average_grade = total_grades / num_courses
+        return average_grade
 
 
 class Enrollment:
@@ -45,3 +54,14 @@ class Enrollment:
 
     def get_enrollment_date(self):
         return self._enrollment_date
+    
+    @classmethod
+    def aggregate_enrollments_per_day(cls):
+        enrollments_per_day = {}
+        for enrollment in cls.all:
+            enrollment_date = enrollment.get_enrollment_date().date()
+            if enrollment_date in enrollments_per_day:
+                enrollments_per_day[enrollment_date] += 1
+            else:
+                enrollments_per_day[enrollment_date] = 1
+        return enrollments_per_day
